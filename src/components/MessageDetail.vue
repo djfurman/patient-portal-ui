@@ -17,12 +17,17 @@ import { useMessageStore } from '../stores/messages'
 import { storeToRefs } from 'pinia'
 
 export default {
+    props: {
+        conversationId: String,
+        required: true,
+    },
+
     setup(props) {
         const messagesStore = useMessageStore()
 
         const {messages} = storeToRefs(messagesStore)
 
-        const msg = messages.filter(message => props.conversation_id == message.conversation_id)[0]
+        const msg = messages.filter(message => props.conversationId == message.conversationId)[0]
     }
 }
 </script>

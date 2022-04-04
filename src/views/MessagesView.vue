@@ -2,7 +2,7 @@
     <div>
         <h1>You have {{unread}} new messages</h1>
         <li v-for="message in messages">
-            <span>{{message.at.toLocaleTimeString()}}  {{message.from}}  {{message.subject}}</span>
+            <span @click="">{{message.at.toLocaleTimeString()}}  {{message.from}}  {{message.subject}}</span>
         </li>
         <p>You have {{total}} total messages</p>
     </div>
