@@ -19,11 +19,14 @@ import HelloWorld from '@/components/HelloWorld.vue'
     </div>
   </header>
 
-  <RouterView />
+  <div class="container">
+    <RouterView />
+  </div>
 </template>
 
 <style>
 @import '@/assets/base.css';
+@import 'bulma/css/bulma.css';
 
 #app {
   max-width: 1280px;

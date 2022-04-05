@@ -1,3 +1,21 @@
+<script setup>
+import { useMessageStore } from '../stores/messages'
+import { storeToRefs } from 'pinia'
+import { toRef } from 'vue'
+
+const props = defineProps({
+    conversationId: String,
+    required: true,
+})
+
+const currentMessageId = toRef(props, 'conversationId')
+
+const messagesStore = useMessageStore()
+const {messages} = storeToRefs(messagesStore)
+
+const msg = messages.filter((message) => currentMessageId == message.conversationId)[0]
+</script>
+
 <template>
     <article>
         <div class="message-header">
@@ -11,28 +29,3 @@
         </div>
     </article>
 </template>
-
-<script>
-import { useMessageStore } from '../stores/messages'
-import { storeToRefs } from 'pinia'
-import { toRef } from 'vue'
-
-export default {
-    props: {
-        conversationId: String,
-        required: true,
-    },
-
-    setup(props) {
-        const currentMessageId = toRef(props, 'conversationId')
-
-        const messagesStore = useMessageStore()
-
-        const {messages} = storeToRefs(messagesStore)
-
-        const msg = messages.filter((message) => currentMessageId == message.conversationId)[0]
-
-        return { msg }
-    }
-}
-</script>
