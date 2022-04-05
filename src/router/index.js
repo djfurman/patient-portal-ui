@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CounterView from '../views/CounterView.vue'
 import MessagesView from '../views/MessagesView.vue'
+import MessageCompose from '../components/MessageCompose.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,7 +29,12 @@ const router = createRouter({
       path: '/inbox',
       name: 'inbox',
       component: MessagesView
-    }
+    },
+    {
+      path: '/compose',
+      name: 'compose',
+      component: MessageCompose
+    },
   ]
 })
 

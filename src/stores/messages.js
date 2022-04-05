@@ -39,7 +39,15 @@ export const useMessageStore = defineStore({
       const conversationComponents = conversationId.split(':')
       const incrementReply = parseInt(conversationComponents[2]) + 1
       const newId = `${conversationComponents[0]}:${conversationComponents[1]}:${incrementReply.toString()}`
-      this.messages.push({conversationId: newId, subject: subject, from: from, at: new Date(), body: body, isRead: true})
+      // TODO replace this with a WSS call to push the event
+      this.$state.messages.push({
+        conversationId: newId, 
+        subject: subject, 
+        from: from, 
+        at: new Date(), 
+        body: body, 
+        isRead: true
+      })
     }
   }
 })

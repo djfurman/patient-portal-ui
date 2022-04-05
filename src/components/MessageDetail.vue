@@ -15,6 +15,7 @@
 <script>
 import { useMessageStore } from '../stores/messages'
 import { storeToRefs } from 'pinia'
+import { toRef } from 'vue'
 
 export default {
     props: {
@@ -23,11 +24,15 @@ export default {
     },
 
     setup(props) {
+        const currentMessageId = toRef(props, 'conversationId')
+
         const messagesStore = useMessageStore()
 
         const {messages} = storeToRefs(messagesStore)
 
-        const msg = messages.filter(message => props.conversationId == message.conversationId)[0]
+        const msg = messages.filter((message) => currentMessageId == message.conversationId)[0]
+
+        return { msg }
     }
 }
 </script>
