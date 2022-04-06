@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import CounterView from '../views/CounterView.vue'
 import MessagesView from '../views/MessagesView.vue'
 import MessageCompose from '../components/MessageCompose.vue'
+import MessageDetail from '../components/MessageDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,12 @@ const router = createRouter({
       path: '/compose',
       name: 'compose',
       component: MessageCompose
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: MessageDetail,
+      props: true
     },
   ]
 })
