@@ -11,7 +11,9 @@ const { messages, total, unread } = storeToRefs(messagesStore)
         <h2 class="subtitle">You have {{ unread }} new messages</h2>
         <ul id="current-messages">
             <li v-for="message in messages" :key="message.conversationId">
-                <span>{{ message.at.toLocaleString() }} | {{ message.from }} | {{ message.subject }}</span>
+                <span
+                    @click="$emit('selectConversation', message.conversationId)"
+                >{{ message.at.toLocaleString() }} | {{ message.from }} | {{ message.subject }}</span>
             </li>
         </ul>
         <p>You have {{ total }} total messages</p>

@@ -13,8 +13,7 @@ import HelloWorld from '@/components/HelloWorld.vue'
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/counter">Counter</RouterLink> 
-        <RouterLink to="/inbox">Inbox</RouterLink>
+        <RouterLink to="/messages">Secure Messages</RouterLink>
       </nav>
     </div>
   </header>
@@ -25,8 +24,8 @@ import HelloWorld from '@/components/HelloWorld.vue'
 </template>
 
 <style>
-@import '@/assets/base.css';
-@import 'bulma/css/bulma.css';
+@import "@/assets/base.css";
+@import "bulma/css/bulma.css";
 
 #app {
   max-width: 1280px;

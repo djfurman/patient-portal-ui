@@ -1,31 +1,35 @@
 <script setup>
 import { useMessageStore } from '../stores/messages'
-import { storeToRefs } from 'pinia'
-import { toRef } from 'vue'
+import { ref } from 'vue'
 
-const props = defineProps({
-    conversationId: String,
-    required: true,
-})
-
-const currentMessageId = toRef(props, 'conversationId')
+const props = defineProps(['currentMessageId'])
 
 const messagesStore = useMessageStore()
-const {messages} = storeToRefs(messagesStore)
-
-const msg = messages.filter((message) => currentMessageId == message.conversationId)[0]
+const { getMessageByConversationId } = messagesStore
+const msg = ref(getMessageByConversationId(props.currentMessageId))
 </script>
 
 <template>
-    <article>
-        <div class="message-header">
-            <p>{{ msg.subject }}</p>
-            <button class="delete" aria-label="delete"></button>
-        </div>
-        <div class="message-body">
-            <h1>From: {{ msg.from }}</h1>
-            <i id="sent-at">{{ msg.at }}</i>
-            <p>{{ msg.body }}</p>
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img
+                    src="https://bulma.io/images/placeholders/128x128.png"
+                    alt="Placeholder white image for senders profile"
+                />
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="media-right">
+                <div class="content is-large">
+                    <p>{{ msg.subject }}</p>
+                </div>
+                <div class="content is-small">
+                    <h1>From: {{ msg.from }}</h1>
+                    <i id="sent-at">{{ msg.at }}</i>
+                    <p>{{ msg.body }}</p>
+                </div>
+            </div>
         </div>
     </article>
 </template>
