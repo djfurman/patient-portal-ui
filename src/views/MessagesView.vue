@@ -17,39 +17,35 @@ const setSelectedConversation = (c) => {
 </script>
 
 <template>
-  <div id="secure-messages">
+  <div id="secure-messages content">
     <h1 class="title">Secure Messages</h1>
 
     <Transition name="fade">
-      <button
-        v-if="messageMode === 'list'"
-        @click="setMessageMode('compose')"
-        class="button is-primary"
-      >Send Message</button>
-      <button
-        v-else-if="messageMode === 'compose'"
-        @click="setMessageMode('list')"
-        class="button is-secondary"
-      >Back to Messages</button>
-      <button
-        v-else-if="messageMode === 'detail'"
-        @click="setMessageMode('list')"
-        class="button is-secondary"
-      >Back to Messages</button>
-    </Transition>
+      <section class="section">
 
-    <Transition name="fade">
-      <div id="message-list" v-if="messageMode === 'list'">
-        <MessageList @select-conversation="setSelectedConversation" />
-      </div>
+        <div class="control">
+          <button v-if="messageMode === 'list'" @click="setMessageMode('compose')" class="button is-primary">Send
+            Message</button>
+          <button v-else-if="messageMode === 'compose'" @click="setMessageMode('list')" class="button is-secondary">Back
+            to
+            Messages</button>
+          <button v-else-if="messageMode === 'detail'" @click="setMessageMode('list')" class="button is-secondary">Back
+            to
+            Messages</button>
+        </div>
 
-      <div id="message-detail" v-else-if="messageMode === 'detail'">
-        <MessageDetail :current-message-id="conversationId" />
-      </div>
+        <div id="message-list" v-if="messageMode === 'list'">
+          <MessageList @select-conversation="setSelectedConversation" />
+        </div>
 
-      <div id="message-compose" v-else-if="messageMode === 'compose'">
-        <MessageCompose />
-      </div>
+        <div id="message-detail" v-else-if="messageMode === 'detail'">
+          <MessageDetail :current-message-id="conversationId" />
+        </div>
+
+        <div id="message-compose" v-else-if="messageMode === 'compose'">
+          <MessageCompose />
+        </div>
+      </section>
     </Transition>
   </div>
 </template>

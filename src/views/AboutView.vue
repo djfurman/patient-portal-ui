@@ -1,24 +1,28 @@
 <template>
   <section class="section">
     <h1 class="title">MyHealthCo</h1>
-    <h2 class="subtitle">Who we are</h2>
-    <p class="content">
-      MyHealthCo is not a real company. So why do we have a webpage? 
-      Well, as it turns out it's far more effective to solve problems people can relate to, instead of using abstracts.
-      Health care is not only a nearly global human experience, it involves many key business processes common to many industries.
-    </p>
+    <p>A fake testing company</p>
+    <article class="article block">
+      <h2 class="subtitle">Who we are</h2>
+      <p>MyHealthCo is not a real company. So why do we have a webpage?</p>
+      <p>
+        Well, as it turns out it's far more effective to solve problems people can relate to, instead of using
+        abstracts.
+        Health care is not only a nearly global human experience, it involves many key business processes common to many
+        industries.
+      </p>
+    </article>
 
-    <br/>
-
-    <h2 class="subtitle">What will this do?</h2>
-    <ul>
-      <li 
-        v-for="useCase in useCases.generalList" 
-        :key="useCase.id"
-      >
-        {{ useCase.description }}
-      </li>
-    </ul>
+    <article class="article block">
+      <h1 class="subtitle">What will this do?</h1>
+      <div class="content is-normal">
+        <ul>
+          <li v-for="useCase in useCases.generalList" :key="useCase.id" :class="{ 'checkmark-li': useCase.isActive }">
+            <span>{{ useCase.description }}</span>
+          </li>
+        </ul>
+      </div>
+    </article>
   </section>
 </template>
 
@@ -131,3 +135,15 @@ const useCases = reactive({
 })
 
 </script>
+
+<style scoped>
+.checkmark-li::marker {
+  content: "✓";
+  color: white;
+}
+
+li span {
+  position: relative;
+  left: 1rem;
+}
+</style>
