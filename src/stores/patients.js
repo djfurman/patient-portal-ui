@@ -8,7 +8,7 @@ export const useCareProviderStore = defineStore({
         patientId: '39817aa2-505f-4e78-bd67-279f7efc7125',
         providers: [
           {
-            providerId: 'ac9e9a4e:d3c0c15f9cb5'
+            providerId: 'd3c0c15f9cb5:aed672'
           }
         ]
       }
