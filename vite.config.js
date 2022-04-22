@@ -12,6 +12,12 @@ export default defineConfig({
     }
   },
   server: {
-    cors: false
+    proxy: {
+      '/demo': {
+        target: 'http://localhost:3500',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/demo/, '/demo')
+      }
+    }
   }
 })

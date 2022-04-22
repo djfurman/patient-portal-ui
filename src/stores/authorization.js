@@ -4,7 +4,7 @@ import { mande } from 'mande'
 
 // Hard coding an authorization header for local dev
 // This will come from the user store and AWS Cognito in prod
-const api = mande('http://localhost:3500/demo/', { headers: { authorization: 'this-is-fine' } })
+const api = mande('/demo', { headers: { authorization: 'this-is-fine' } })
 
 export const useAuthorizationStore = defineStore({
   id: 'authorizations',
@@ -15,13 +15,13 @@ export const useAuthorizationStore = defineStore({
     }
   }),
   actions: {
-    async fetchRecordAuthorizations() {
+    fetchRecordAuthorizations() {
       // Hard code a user for testing
-      const user = { loggedIn: true, loadingState: false, errorLoadingState: false }
+      const user = { loggedIn: true, loadingState: false, errorLoadingState: false, userId: 'anonymous' }
       // This will be the common user store
       // const user = useUserStore()
       if (user.loggedIn) {
-        this.access = await this.fetchAuthsForUser(user.userId)
+        this.access = this.fetchAuthsForUser(user.userId)
       } else {
         throw new Error('User is not authenticated')
       }

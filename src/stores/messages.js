@@ -1,4 +1,4 @@
-import { defineStore, getActivePinia } from 'pinia'
+import { defineStore } from 'pinia'
 import { useAuthorizationStore } from './authorization'
 import { mande } from 'mande'
 
@@ -10,12 +10,12 @@ import { mande } from 'mande'
 
 // In the final implementation this will use cognito IDs instead of UUIDs 
 
-const api = mande('http://localhost:35000/demo/', { headers: { authorization: 'this is fine' } })
+const api = mande('/demo', { headers: { authorization: 'this is fine' } })
 
 export const useMessageStore = defineStore({
   id: 'messages',
   state: () => ({
-    messages: []
+    messages: [],
   }),
   getters: {
     total: (state) => state.messages.length,
@@ -29,8 +29,23 @@ export const useMessageStore = defineStore({
       const auths = useAuthorizationStore()
       if (auths.access.patients) {
         // code to handle patient(s) experience
-        const selectedPatient = auths.access.patients[0]
-        this.message = await this.fetchMessagesForUser()
+        const patientId = auths.access.patients[0]
+        try {
+          this.messages = await api.get(`/patients/${patientId}/messages`)
+            .then((messageRes) => {
+              if (messageRes.status === 'success') {
+                this.messages = messageRes.data.messages
+              } else {
+                console.log(messageRes)
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        } catch (error) {
+          console.log('error happened while awaiting')
+          console.log(error)
+        }
       } else if (auths.access.providers) {
         // code to handle provider experience
         console.log('Provider logic fired in messages store')
@@ -38,19 +53,6 @@ export const useMessageStore = defineStore({
         console.log('An error occurred in establishing the authorizations store')
         console.log(auths)
       }
-    },
-    async fetchMessagesForUser(patientId) {
-      return await api.get(`/patients/${patientId}/messages`)
-        .then((messageRes) => {
-          if (messageRes.status === 'success') {
-            this.messages = messageRes.data
-          } else {
-            console.log(messageRes)
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     },
     reply(conversationId, subject, from, body) {
       const conversationComponents = conversationId.split(':')
