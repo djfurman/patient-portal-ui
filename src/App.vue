@@ -2,8 +2,16 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
 import { useSimpleUserStore } from '@/stores/simpleUser'
+import { useRouter } from 'vue-router'
 
 const user = useSimpleUserStore()
+
+const router = useRouter()
+const fullLogout = () => {
+  user.logout()
+  router.push({ name: 'home' })
+}
+
 
 // user.$onAction(({
 //   name,
@@ -33,7 +41,7 @@ const user = useSimpleUserStore()
         <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
         <RouterLink :to="{ name: 'dashboard' }" v-if="user.isLoggedIn">Dashboard</RouterLink>
         <RouterLink :to="{ name: 'messages' }" v-if="user.isLoggedIn">Secure Messages</RouterLink>
-        <a @click="user.logout()" v-if="user.isLoggedIn">Logout</a>
+        <a @click="fullLogout" v-if="user.isLoggedIn">Logout</a>
       </nav>
     </div>
   </header>
@@ -46,6 +54,7 @@ const user = useSimpleUserStore()
 <style>
 @import "@/assets/base.css";
 @import "bulma/css/bulma.css";
+@import "bulma-prefers-dark/css/bulma-prefers-dark.css";
 
 #app {
   max-width: 1280px;
