@@ -1,4 +1,4 @@
-import { defineStore } from "pinia"
+import { defineStore, acceptHMRUpdate } from "pinia"
 
 export const useCareProviderStore = defineStore({
   id: 'careProviders',
@@ -20,3 +20,7 @@ export const useCareProviderStore = defineStore({
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useCareProviderStore, import.meta.hot))
+}

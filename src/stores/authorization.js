@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 // import { useUserStore } from '/user'
 import { mande } from 'mande'
 
@@ -41,3 +41,7 @@ export const useAuthorizationStore = defineStore({
     }
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useAuthorizationStore, import.meta.hot))
+}

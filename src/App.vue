@@ -16,9 +16,9 @@ const user = useSimpleUserStore()
       <nav>
         <RouterLink :to="{ name: 'home' }">Home</RouterLink>
         <RouterLink :to="{ name: 'about' }">About</RouterLink>
-        <RouterLink :to="{ name: 'login' }" v-if="!isLoggedIn">Login</RouterLink>
-        <RouterLink :to="{ name: 'messages' }" v-if="isLoggedIn">Secure Messages</RouterLink>
-        <a @click="user.logout()" v-if="isLoggedIn">Logout</a>
+        <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
+        <RouterLink :to="{ name: 'messages' }" v-if="user.isLoggedIn">Secure Messages</RouterLink>
+        <a @click="user.logout()" v-if="user.isLoggedIn">Logout</a>
       </nav>
     </div>
   </header>

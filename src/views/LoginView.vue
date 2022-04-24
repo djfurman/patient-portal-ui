@@ -1,12 +1,14 @@
 <script setup>
 import { useAuthorizationStore } from '@/stores/authorization'
-import router from '@/router'
+import { useRouter } from 'vue-router';
 import { useSimpleUserStore } from '@/stores/simpleUser'
 
 const user = useSimpleUserStore()
 
 const auths = useAuthorizationStore()
 auths.fetchRecordAuthorizations()
+
+const router = useRouter()
 
 const login = () => {
   user.login()

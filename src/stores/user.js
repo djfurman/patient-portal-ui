@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import { CognitoAuth } from 'amazon-cognito-auth-js'
 import { router } from '@/router'
 
@@ -57,3 +57,7 @@ export const useUserStore = defineStore({
     },
   }
 })
+
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useUserStore, import.meta.hot))
+}

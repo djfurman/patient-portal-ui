@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useSimpleUserStore } from '@/stores/simpleUser'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 
-const user = useSimpleUserStore()
 
 const routes = [
   {
@@ -41,7 +39,7 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   // Check the route is protected & the user login status
-  if (to.meta.requiresAuth && !user.isLoggedIn) {
+  if (to.meta.requiresAuth) {
     // redirect to Login if trying to access protected page without authentication
     return { name: 'login' }
   }
