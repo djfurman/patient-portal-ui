@@ -6,19 +6,21 @@ export const useSimpleUserStore = defineStore({
     cognitoInfo: {},
     loggedIn: false,
     loadingState: false,
-    errorLoadingState: false
+    errorLoadingState: false,
+    userId: '',
   }),
   getters: {
     isLoggedIn: (state) => { return state.loggedIn }
   },
   actions: {
-    login() {
+    login(username) {
+      // This is where the auth call would be made and hopefully encode the application userId
+      this.userId = username
       this.loggedIn = true
     },
 
     logout() {
       this.$reset()
-      // this.$state.loggedIn = false
     },
   }
 })

@@ -1,5 +1,6 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
 // import { useUserStore } from '/user'
+import { useSimpleUserStore } from '@/stores/simpleUser'
 import { mande } from 'mande'
 
 // Hard coding an authorization header for local dev
@@ -13,32 +14,34 @@ export const useAuthorizationStore = defineStore({
       patients: [],
       providers: [],
     },
+    isLoading: true,
   }),
   actions: {
-    async fetchRecordAuthorizations() {
-      // Hard code a user for testing
-      const user = { loggedIn: true, loadingState: false, errorLoadingState: false, userId: 'anonymous' }
-      // This will be the common user store
-      // const user = useUserStore()
-      if (user.loggedIn) {
-        try {
-          let authRes = await api.get(`/users/${user.userId}/authorizations`, { responseAs: 'response' })
+    async fill() {
+      // Use the common user store
+      const user = useSimpleUserStore()
+      // handle the API call part of the function
+      try {
+        let authRes = await api.get(`/users/${user.userId}/authorizations`, { responseAs: 'response' })
 
-          if (authRes.status == 200) {
-            const authData = await authRes.json()
-            if (authData.status === 'success') {
-              this.access = authData.data
-            } else {
-              console.log(authData)
-            }
+        if (authRes.status === 200 || authRes.status === 304) {
+          const authData = await authRes.json()
+          if (authData.status === 'success') {
+            this.access = authData.data
+            this.isLoading = false
           } else {
-            console.log(authRes)
+            console.log(authData)
           }
-        } catch (err) {
-          console.log(err)
+        } else {
+          console.log(authRes)
         }
+      } catch (err) {
+        console.log(err)
       }
-    }
+    },
+    async refreshAuthorizations() {
+      await this.fill()
+    },
   }
 })
 

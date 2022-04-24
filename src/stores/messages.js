@@ -1,4 +1,4 @@
-import { acceptHMRUpdate, defineStore } from 'pinia'
+import { defineStore, acceptHMRUpdate } from 'pinia'
 import { useAuthorizationStore } from './authorization'
 import { mande } from 'mande'
 
@@ -25,33 +25,35 @@ export const useMessageStore = defineStore({
     },
   },
   actions: {
-    async fetchUserMessages() {
-      const auths = useAuthorizationStore()
-      if (auths.access.patients) {
+    async fill() {
+      const authStore = useAuthorizationStore()
+      if (authStore.access.patients) {
         // code to handle patient(s) experience
-        const patientId = auths.access.patients[0]
+        const patientId = authStore.access.patients[0]
         try {
-          this.messages = await api.get(`/patients/${patientId}/messages`)
-            .then((messageRes) => {
-              if (messageRes.status === 'success') {
-                this.messages = messageRes.data.messages
-              } else {
-                console.log(messageRes)
-              }
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        } catch (error) {
-          console.log('error happened while awaiting')
-          console.log(error)
+          let messageRes = await api.get(`/patients/${patientId}/messages`, { responseAs: 'response' })
+          if (messageRes.status == 200 || messageRes.status === 304) {
+            const messageData = await messageRes.json()
+            if (messageData.status === 'success') {
+              this.messages = messageData.data.messages
+              this.isLoading = false
+            } else {
+              console.log('message respone data was other than status:success')
+              console.log(messageData)
+            }
+          } else {
+            console.log(`api call response was ${messageRes.status} other than 200 OK`)
+            console.log(messageRes)
+          }
+        } catch (err) {
+          console.log(err)
         }
-      } else if (auths.access.providers) {
+      } else if (authStore.access.providers) {
         // code to handle provider experience
         console.log('Provider logic fired in messages store')
       } else {
         console.log('An error occurred in establishing the authorizations store')
-        console.log(auths)
+        console.log(authStore)
       }
     },
     reply(conversationId, subject, from, body) {

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
-
+import { useSimpleUserStore } from '@/stores/simpleUser'
 
 const routes = [
   {
@@ -23,6 +23,14 @@ const routes = [
     component: LoginView
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/ProtectedView.vue')
+  },
+  {
     path: '/messages',
     name: 'messages',
     meta: {
@@ -39,8 +47,10 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   // Check the route is protected & the user login status
-  if (to.meta.requiresAuth) {
+  const user = useSimpleUserStore()
+  if (to.meta.requiresAuth && !user.isLoggedIn) {
     // redirect to Login if trying to access protected page without authentication
+    // maybe fire a flash message that the user needs to login?
     return { name: 'login' }
   }
 })

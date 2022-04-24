@@ -4,6 +4,20 @@ import HelloWorld from '@/components/HelloWorld.vue'
 import { useSimpleUserStore } from '@/stores/simpleUser'
 
 const user = useSimpleUserStore()
+
+// user.$onAction(({
+//   name,
+//   store,
+//   args,
+//   after,
+//   onError,
+// }) => {
+//   if (name === 'logout') {
+//     after(() => {
+
+//     })
+//   }
+// })
 </script>
 
 <template>
@@ -17,6 +31,7 @@ const user = useSimpleUserStore()
         <RouterLink :to="{ name: 'home' }">Home</RouterLink>
         <RouterLink :to="{ name: 'about' }">About</RouterLink>
         <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
+        <RouterLink :to="{ name: 'dashboard' }" v-if="user.isLoggedIn">Dashboard</RouterLink>
         <RouterLink :to="{ name: 'messages' }" v-if="user.isLoggedIn">Secure Messages</RouterLink>
         <a @click="user.logout()" v-if="user.isLoggedIn">Logout</a>
       </nav>
