@@ -1,7 +1,6 @@
 <script setup>
-import { useMessageStore } from '../stores/messages'
+import { useMessageStore } from '@/stores/messages'
 import { storeToRefs } from 'pinia'
-import { onMounted } from 'vue'
 
 const messagesStore = useMessageStore()
 messagesStore.fetchUserMessages()

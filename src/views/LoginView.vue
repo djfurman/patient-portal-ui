@@ -1,16 +1,17 @@
 <script setup>
-import { useAuthorizationStore } from "@/stores/authorization"
-import { onMounted } from "vue"
+import { useAuthorizationStore } from '@/stores/authorization'
 import router from '@/router'
+import { useSimpleUserStore } from '@/stores/simpleUser'
 
-onMounted(() => {
-  const auths = useAuthorizationStore()
-  auths.fetchRecordAuthorizations()
-})
+const user = useSimpleUserStore()
 
-const login = (() => {
+const auths = useAuthorizationStore()
+auths.fetchRecordAuthorizations()
+
+const login = () => {
+  user.login()
   router.push({ name: 'home' })
-})
+}
 </script>
 
 <template>

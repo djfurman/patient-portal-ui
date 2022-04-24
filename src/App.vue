@@ -1,6 +1,9 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
+import { useSimpleUserStore } from '@/stores/simpleUser'
+
+const user = useSimpleUserStore()
 </script>
 
 <template>
@@ -11,10 +14,11 @@ import HelloWorld from '@/components/HelloWorld.vue'
       <HelloWorld msg="You did it!" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/login">Login</RouterLink>
-        <RouterLink to="/messages">Secure Messages</RouterLink>
+        <RouterLink :to="{ name: 'home' }">Home</RouterLink>
+        <RouterLink :to="{ name: 'about' }">About</RouterLink>
+        <RouterLink :to="{ name: 'login' }" v-if="!isLoggedIn">Login</RouterLink>
+        <RouterLink :to="{ name: 'messages' }" v-if="isLoggedIn">Secure Messages</RouterLink>
+        <a @click="user.logout()" v-if="isLoggedIn">Logout</a>
       </nav>
     </div>
   </header>

@@ -12,31 +12,32 @@ export const useAuthorizationStore = defineStore({
     access: {
       patients: [],
       providers: [],
-    }
+    },
   }),
   actions: {
-    fetchRecordAuthorizations() {
+    async fetchRecordAuthorizations() {
       // Hard code a user for testing
       const user = { loggedIn: true, loadingState: false, errorLoadingState: false, userId: 'anonymous' }
       // This will be the common user store
       // const user = useUserStore()
       if (user.loggedIn) {
-        this.access = this.fetchAuthsForUser(user.userId)
-      } else {
-        throw new Error('User is not authenticated')
-      }
-    },
-    async fetchAuthsForUser(userId) {
-      return await api.get(`/users/${userId}/authorizations`)
-        .then((authorizations) => {
-          if (authorizations.status === 'success') {
-            this.access = authorizations.data
+        try {
+          let authRes = await api.get(`/users/${user.userId}/authorizations`, { responseAs: 'response' })
+
+          if (authRes.status == 200) {
+            const authData = await authRes.json()
+            if (authData.status === 'success') {
+              this.access = authData.data
+            } else {
+              console.log(authData)
+            }
           } else {
-            console.log(authorizations)
+            console.log(authRes)
           }
-        }).catch((err) => {
+        } catch (err) {
           console.log(err)
-        })
+        }
+      }
     }
   }
 })
