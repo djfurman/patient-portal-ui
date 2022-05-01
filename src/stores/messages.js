@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { useAuthorizationStore } from './authorization'
+import { useSimpleUserStore } from '@/stores/simpleUser'
 import { mande } from 'mande'
 
 // conversationId is keyed around the concept of patientId:providerId:sequenceNumber
@@ -10,7 +10,7 @@ import { mande } from 'mande'
 
 // In the final implementation this will use cognito IDs instead of UUIDs 
 
-const api = mande('/demo', { headers: { authorization: 'this is fine' } })
+const api = mande('/demo')
 
 export const useMessageStore = defineStore({
   id: 'messages',
@@ -26,12 +26,12 @@ export const useMessageStore = defineStore({
   },
   actions: {
     async fill() {
-      const authStore = useAuthorizationStore()
-      if (authStore.access.patients) {
+      const userStore = useSimpleUserStore()
+      if (userStore.accesses.patients) {
         // code to handle patient(s) experience
-        const patientId = authStore.access.patients[0]
+        const patientId = userStore.accesses.selectedPatient
         try {
-          let messageRes = await api.get(`/patients/${patientId}/messages`, { responseAs: 'response' })
+          let messageRes = await api.get(`/patients/${patientId}/messages`, userStore.withApiSettings())
           if (messageRes.status == 200 || messageRes.status === 304) {
             const messageData = await messageRes.json()
             if (messageData.status === 'success') {
@@ -56,20 +56,20 @@ export const useMessageStore = defineStore({
         console.log(authStore)
       }
     },
-    reply(conversationId, subject, from, body) {
-      const conversationComponents = conversationId.split(':')
-      const incrementReply = parseInt(conversationComponents[2]) + 1
-      const newId = `${conversationComponents[0]}:${conversationComponents[1]}:${incrementReply.toString()}`
-      // TODO replace this with a WSS call to push the event
-      this.$state.messages.push({
-        conversationId: newId,
-        subject: subject,
-        from: from,
-        at: new Date(),
-        body: body,
-        isRead: true
-      })
-    }
+    // reply(conversationId, subject, from, body) {
+    //   const conversationComponents = conversationId.split(':')
+    //   const incrementReply = parseInt(conversationComponents[2]) + 1
+    //   const newId = `${conversationComponents[0]}:${conversationComponents[1]}:${incrementReply.toString()}`
+    //   // TODO replace this with a WSS call to push the event
+    //   this.$state.messages.push({
+    //     conversationId: newId,
+    //     subject: subject,
+    //     from: from,
+    //     at: new Date(),
+    //     body: body,
+    //     isRead: true
+    //   })
+    // }
   }
 })
 

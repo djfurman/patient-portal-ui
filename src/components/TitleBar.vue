@@ -1,9 +1,11 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+// import { storeToRefs } from 'pinia'
 import { useSimpleUserStore } from '@/stores/simpleUser'
-import { useRouter } from 'vue-router'
+// import PatientSelect from '@/components/PatientSelect.vue'
 
 const user = useSimpleUserStore()
+
 
 const router = useRouter()
 const fullLogout = () => {
@@ -56,22 +58,19 @@ const fullLogout = () => {
         </div>
         <hr class="navbar-divider">
 
-        <div id="nav-dashboard" v-if="user.isLoggedIn">
-          <div class="navbar-item">
-            <RouterLink :to="{ name: 'dashboard' }">Dashboard</RouterLink>
-          </div>
+        <div id="nav-dashboard" class="navbar-item" v-if="user.isLoggedIn">
+          <RouterLink :to="{ name: 'dashboard' }">Dashboard</RouterLink>
           <hr class="navbar-divider">
         </div>
 
-        <div id="navbar-messages" v-if="user.isLoggedIn">
-          <div class="navbar-item">
-            <RouterLink :to="{ name: 'messages' }">Secure Messages</RouterLink>
-          </div>
+        <div id="navbar-messages" class="navbar-item" v-if="user.isLoggedIn">
+          <RouterLink :to="{ name: 'messages' }">Secure Messages</RouterLink>
           <hr class="navbar-divider">
         </div>
       </div>
 
       <div class="navbar-end">
+        <!-- <PatientSelect/> -->
         <div class="navbar-item">
           <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
           <a @click="fullLogout" v-if="user.isLoggedIn">Logout</a>
@@ -79,5 +78,4 @@ const fullLogout = () => {
       </div>
     </div>
   </nav>
-
 </template>

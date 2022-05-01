@@ -1,9 +1,5 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useAuthorizationStore } from '@/stores/authorization'
-
-const authorizationStore = useAuthorizationStore()
-authorizationStore.fill()
 </script>
 
 <template>
