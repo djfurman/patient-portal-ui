@@ -1,11 +1,9 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
-// import { storeToRefs } from 'pinia'
 import { useSimpleUserStore } from '@/stores/simpleUser'
-// import PatientSelect from '@/components/PatientSelect.vue'
+import PatientSelect from '@/components/PatientSelect.vue'
 
 const user = useSimpleUserStore()
-
 
 const router = useRouter()
 const fullLogout = () => {
@@ -70,7 +68,7 @@ const fullLogout = () => {
       </div>
 
       <div class="navbar-end">
-        <!-- <PatientSelect/> -->
+        <PatientSelect />
         <div class="navbar-item">
           <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
           <a @click="fullLogout" v-if="user.isLoggedIn">Logout</a>

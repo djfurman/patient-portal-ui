@@ -1,7 +1,8 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { CognitoAuth } from 'amazon-cognito-auth-js'
-import { router } from '@/router'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const CLIENT_ID = ""
 const APP_DOMAIN = ""
 const REDIRECT_URI = ""

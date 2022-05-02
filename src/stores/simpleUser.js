@@ -30,10 +30,13 @@ export const useSimpleUserStore = defineStore({
   getters: {
     actingOnBehalfOf: (state) => { return state.accesses.selectedPatient },
     getPatientIdList: (state) => {
-      let patientIds = []
-      state.accesses.patients.forEach((patient) => { patientIds.push(patient.patientId) })
-      return patientIds
+      return () => {
+        let patientIds = []
+        state.accesses.patients.forEach((patient) => { patientIds.push(patient.patientId) })
+        return patientIds
+      }
     },
+    isAccessPopulated: (state) => { return state.accesses.isPopulated },
     isLoggedIn: (state) => { return state.loggedIn },
   },
   actions: {
@@ -47,13 +50,11 @@ export const useSimpleUserStore = defineStore({
           }, 300)
         })
         this.userId = loginRes.username
-        this.isLoading = false
         this.loggedIn = true
-
+        this.setUserAllClear()
         this.refreshAccesses()
       } catch (err) {
-        this.errorLoadingState = true
-        this.loadingState = false
+        this.setUserErrors()
         console.log(err)
       }
     },
@@ -75,8 +76,7 @@ export const useSimpleUserStore = defineStore({
             this.accesses.patients = authData.data.patients
             this.accesses.providers = authData.data.providers
             // mark that accesses have completed loading and the lists are populated
-            this.accesses.isLoading = false
-            this.accesses.isPopulated = true
+            this.setAccessAllClear()
           } else {
             this.setAccessErrors()
             console.log('jsend payload did not return success')
@@ -94,14 +94,31 @@ export const useSimpleUserStore = defineStore({
       }
     },
 
+    setAccessAllClear() {
+      this.accesses.hasLoadErrors = false
+      this.accesses.isLoading = false
+      this.accesses.isPopulated = true
+    },
+
     setAccessErrors() {
       this.accesses.hasLoadErrors = true
       this.accesses.isLoading = false
       this.accesses.isPopulated = false
     },
 
+    setUserAllClear() {
+      this.loadingState = false
+      this.isLoading = false
+    },
+
+    setUserErrors() {
+      this.errorLoadingState = true
+      this.loadingState = false
+      this.isLoading = false
+    },
+
     withApiSettings() {
-      return { responseAs: 'response', headers: { authorization: `${this.token.type} ${this.token.value}` } }
+      return { responseAs: 'response', headers: { Authorization: `${this.token.type} ${this.token.value}` } }
     }
   }
 })

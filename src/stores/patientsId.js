@@ -4,50 +4,50 @@ import { mande } from 'mande'
 
 // Hard coding an authorization header for local dev
 // This will come from the user store and AWS Cognito in prod
-const api = mande('/demo', { headers: { authorization: 'this-is-fine' } })
+const api = mande('/demo')
 
-export const usePatientIdStore = defineStore({
+export const usePatientsIdStore = defineStore({
   id: 'patientIds',
   state: () => ({
-    patients: [
-      {
-        patientId: '39817aa2-505f-4e78-bd67-279f7efc7125',
-        name: {
-          given: 'John',
-          surname: 'Doe',
-        },
-        avatar: null
-      },
-      {
-        patientId: '0da9da80-8538-4139-a208-c03d319dbc05',
-        name: {
-          given: 'Jane',
-          surname: 'Doe',
-        },
-        avatar: 'https://bulma.io/images/placeholders/128x128.png'
-      }
-    ],
+    patients: [],
     selectedPatient: '',
     isLoading: false,
   }),
   getters: {
     getPatientByPatientId: (state) => {
-      return (patientId) => state.patients.find((patient) => patient.patientId === patientId)
-    }
+      return (patientId) => {
+        if (!state.isLoading) {
+          state.selectedPatient = 'loading'
+          return {
+            id: 'loading',
+            picture: null,
+            name: {
+              given_name: 'Still',
+              family_name: 'Loading',
+              preferred_username: 'Loading...',
+            }
+          }
+        }
+        state.patients.find((patient) => patient.patientId === patientId)
+      }
+    },
   },
   actions: {
     async fill() {
+      this.isLoading = true
       const userStore = useSimpleUserStore()
       const patientIdList = userStore.getPatientIdList()
-      patientIdList.forEach((patient) => {
+      await patientIdList.forEach(async (patientId) => {
         try {
-          let patientIdRes = await api.get(`/patients/${patient}/basicId`, { responseAs: 'response' })
+          let patientIdRes = await api.get(`/patients/${patientId}/basicId`, userStore.withApiSettings())
 
           if (patientIdRes.status === 200 || patientIdRes.status === 304) {
             const patientData = await patientIdRes.json()
             if (patientData.status === 'success') {
               const patientInfo = patientData.data
-              this.patients.push({ patientId: patient, avatar: patientInfo.avatarUri, name: { given: patientData.name.given, surname: patientData.name.surname } })
+              this.patients.push({ id: patientId, picture: patientInfo.picture, name: { given_name: patientInfo.name.given_name, family_name: patientInfo.name.family_name, preferred_username: null } })
+              this.selectedPatient = this.patients[0].id
+              this.isLoading = false
             } else {
               console.log('jsend status other than success')
               console.log(patientData)
@@ -65,5 +65,5 @@ export const usePatientIdStore = defineStore({
 })
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(usePatientIdStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(usePatientsIdStore, import.meta.hot))
 }
