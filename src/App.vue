@@ -1,9 +1,12 @@
 <script setup>
+import { dom } from '@fortawesome/fontawesome-svg-core'
 import { RouterView } from 'vue-router'
 import { useMessageStore } from '@/stores/messages'
-import { usePatientsIdStore } from '@/stores/patientsId';
-import { useSimpleUserStore } from '@/stores/simpleUser';
+import { usePatientsIdStore } from '@/stores/patientsId'
+import { useSimpleUserStore } from '@/stores/simpleUser'
 import TitleBar from '@/components/TitleBar.vue'
+
+dom.watch()
 
 const userStore = useSimpleUserStore()
 const patientsIdStore = usePatientsIdStore()
