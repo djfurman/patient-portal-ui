@@ -48,12 +48,12 @@ export const useMessageStore = defineStore({
         } catch (err) {
           console.log(err)
         }
-      } else if (authStore.access.providers) {
+      } else if (userStore.access.providers) {
         // code to handle provider experience
         console.log('Provider logic fired in messages store')
       } else {
-        console.log('An error occurred in establishing the authorizations store')
-        console.log(authStore)
+        console.log('An error occurred in reading the authorizations')
+        console.log(userStore)
       }
     },
     // reply(conversationId, subject, from, body) {

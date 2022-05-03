@@ -8,26 +8,6 @@ const userStore = useSimpleUserStore()
 const { isLoggedIn, isAccessPopulated } = storeToRefs(userStore)
 const patientsIdStore = usePatientsIdStore()
 
-const accessUpdate = userStore.$onAction(({
-  name,
-  store,
-  args,
-  after,
-  onError,
-}) => {
-  if (name === 'refreshAccesses') {
-    after(() => {
-      console.log('subscriber realized accesses had been refreshed')
-      patientsIdStore.fill()
-    })
-
-    onError((error) => {
-      console.warn('something bad happened trying to subscribe to the store')
-      console.log(error)
-    })
-  }
-})
-
 const menuIsActive = ref(false)
 const dynamicClass = computed((menuIsActive) => {
   if (menuIsActive) { return 'is-active' }
