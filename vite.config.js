@@ -17,6 +17,11 @@ export default defineConfig({
         target: 'http://localhost:3500',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/demo/, '/demo')
+      },
+      '/ws': {
+        target: 'ws://localhost:3500',
+        ws: true,
+        rewrite: (path) => path.replace(/^\/ws/, '/ws')
       }
     }
   }

@@ -5,6 +5,7 @@ import { useMessageStore } from '@/stores/messages'
 import { usePatientsIdStore } from '@/stores/patientsId'
 import { useSimpleUserStore } from '@/stores/simpleUser'
 import TitleBar from '@/components/TitleBar.vue'
+import { onMounted } from 'vue'
 
 dom.watch()
 
@@ -41,6 +42,25 @@ const accessUpdate = userStore.$onAction(({
       console.warn('something bad happened trying to reset the other stores')
       console.log(error)
     })
+  }
+})
+
+onMounted(async () => {
+  const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
+  const socketUrl = `${socketProtocol}//${window.location.host}/ws`
+
+  const socket = await new WebSocket(socketUrl)
+
+  socket.onopen = () => {
+    if (socket.readyState != socket.OPEN) {
+      console.log('Could not send message')
+    }
+    socket.send(JSON.stringify({ message: "hello server" }))
+  }
+
+  socket.onmessage = (event) => {
+    let parsedMessage = JSON.parse(event.data)
+    console.log(parsedMessage)
   }
 })
 </script>
