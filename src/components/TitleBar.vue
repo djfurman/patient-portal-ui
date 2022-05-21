@@ -2,6 +2,10 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { useSimpleUserStore } from '@/stores/simpleUser'
 import PatientSelect from '@/components/PatientSelect.vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCircleDot, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCircleDot, faArrowCircleUp)
 
 const user = useSimpleUserStore()
 
@@ -68,6 +72,12 @@ const fullLogout = () => {
       </div>
 
       <div class="navbar-end">
+        <div class="navbar-item">
+          <i class="fa-solid fa-circle-dot"></i>
+        </div>
+        <div class="navbar-item has-tooltip-bottom" data-tooltip="Connected in Real Time">
+          <i class="fa-solid fa-arrow-circle-up"></i>
+        </div>
         <PatientSelect />
         <div class="navbar-item">
           <RouterLink :to="{ name: 'login' }" v-if="!user.isLoggedIn">Login</RouterLink>
