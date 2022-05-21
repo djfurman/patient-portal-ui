@@ -3,7 +3,6 @@ import { useMessageStore } from '@/stores/messages'
 
 const props = defineProps(['currentMessageId'])
 
-console.log(props.currentMessageId)
 const messageStore = useMessageStore()
 const msg = messageStore.getMessageByConversationId(props.currentMessageId)
 </script>
